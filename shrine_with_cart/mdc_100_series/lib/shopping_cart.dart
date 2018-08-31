@@ -54,8 +54,19 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
           child: ScopedModelDescendant<AppStateModel>(
             builder: (context, child, model) {
               return Stack(
-                children: [
+                children: <Widget>[
                   ListView(
+                    padding: EdgeInsets.only(top: 56.0),
+                    children: [
+                      const SizedBox(height: 16.0),
+                      Column(
+                        children: _createShoppingCartRows(model),
+                      ),
+                      ShoppingCartSummary(model: model),
+                      const SizedBox(height: 100.0),
+                    ],
+                  ),
+                  /*ListView(
                     children: [
                       Row(
                         children: [
@@ -82,7 +93,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                       ShoppingCartSummary(model: model),
                       const SizedBox(height: 100.0),
                     ],
-                  ),
+                  ),*/
                   Positioned(
                     bottom: 16.0,
                     left: 16.0,
@@ -101,6 +112,46 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                         model.clearCart();
                         ShortBottomSheet.of(context).close();
                       },
+                    ),
+                  ),
+                  GestureDetector(
+                    onVerticalDragStart: (details) => ShortBottomSheet.of(context).close(),
+                    child: Container(
+                      height: 57.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          AppBar(
+                            backgroundColor: kShrinePink50,
+                            elevation: 0.0,
+                            leading: IconButton(
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              onPressed: () => ShortBottomSheet.of(context).close(),
+                            ),
+                            title: Row(
+                              children: <Widget>[
+                                Text(
+                                  'CART',
+                                  style: localTheme.textTheme.subhead
+                                      .copyWith(fontWeight: FontWeight.w600),
+                                ),
+                                const SizedBox(width: 16.0),
+                                Text('${model.totalCartQuantity} ITEMS',
+                                    style: localTheme.textTheme
+                                        .caption), // TODO: check text styling
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(right: 16.0),
+                            width: 315.0,
+                            child: const Divider(
+                              color: kShrineBrown900,
+                              height: 1.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
